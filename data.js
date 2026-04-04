@@ -199,9 +199,9 @@ export const categoryMap = {
           
             <img src="img/cordelia/cordelia (2).jpg" alt="Cordelia foto 2">
             <img src="img/cordelia/cordelia (3).JPG" alt="Cordelia foto 3">
-            <img src="img/cordelia/cordelia (4).jpg" alt="Cordelia foto 4">
-            <img src="img/cordelia/cordelia (5).jpg" alt="Cordelia foto 5">
-            <img src="img/cordelia/cordelia (6).jpg" alt="Cordelia foto 6">
+            <img src="img/cordelia/cordelia (4).JPG" alt="Cordelia foto 4">
+            <img src="img/cordelia/cordelia (5).JPG" alt="Cordelia foto 5">
+            <img src="img/cordelia/cordelia (6).JPG" alt="Cordelia foto 6">
             <img src="img/cordelia/cordelia (7).jpg" alt="Cordelia foto 7">
             <img src="img/cordelia/cordelia (8).jpg" alt="Cordelia foto 8">
             <img src="img/cordelia/cordelia (9).jpg" alt="Cordelia foto 9">
@@ -213,7 +213,7 @@ export const categoryMap = {
     title: "La chica del cuarto de citas (2020)", 
     roles_es: ["Escritora", "Modelo de fotografía"],
     roles_en: ["Writer", "Photography Model"], 
-    images: ["img/la_chica/lachica_1.JPG"], 
+    images: ["img/chica/chica (1).JPG"], 
     
     custom_layout: `
        
@@ -239,9 +239,11 @@ export const categoryMap = {
         <!-- 3. GALERÍA DE FOTOS (4 imágenes) -->
         <h3 class="custom-subtitle" data-es="Galería de fotos" data-en="Photo gallery">Galería de fotos</h3>
         <div class="modal-gallery">
-            <img src="img/la_chica/lachica_1.JPG" alt="La chica del cuarto de citas foto 1">
-            <img src="img/la_chica/lachica_2.JPG" alt="La chica del cuarto de citas foto 2">
-            <img src="img/la_chica/lachica_3.JPG" alt="La chica del cuarto de citas foto 3">
+            <img src="img/chica/chica (1).JPG" alt="La chica del cuarto de citas foto 1">
+            <img src="img/chica/chica (2).JPG" alt="La chica del cuarto de citas foto 2">
+            <img src="img/chica/chica (3).JPG" alt="La chica del cuarto de citas foto 3">
+                        <img src="img/chica/chica (4).JPG" alt="La chica del cuarto de citas foto 4">
+
         </div>
     `,
 },        
