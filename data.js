@@ -213,7 +213,7 @@ export const categoryMap = {
     title: "La chica del cuarto de citas (2020)", 
     roles_es: ["Escritora", "Modelo de fotografía"],
     roles_en: ["Writer", "Photography Model"], 
-    images: ["img/la chica/lachica (1).jpg"], 
+    images: ["img/la_chica/lachica_1.jpg"], 
     
     custom_layout: `
        
@@ -239,10 +239,9 @@ export const categoryMap = {
         <!-- 3. GALERÍA DE FOTOS (4 imágenes) -->
         <h3 class="custom-subtitle" data-es="Galería de fotos" data-en="Photo gallery">Galería de fotos</h3>
         <div class="modal-gallery">
-            <img src="img/la chica/lachica (1).jpg" alt="La chica del cuarto de citas foto 1">
-            <img src="img/la chica/lachica (2).jpg" alt="La chica del cuarto de citas foto 2">
-            <img src="img/la chica/lachica (3).jpg" alt="La chica del cuarto de citas foto 3">
-         
+            <img src="img/la_chica/lachica_1.jpg" alt="La chica del cuarto de citas foto 1">
+            <img src="img/la_chica/lachica_2.jpg" alt="La chica del cuarto de citas foto 2">
+            <img src="img/la_chica/lachica_3.jpg" alt="La chica del cuarto de citas foto 3">
         </div>
     `,
 },        
