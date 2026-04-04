@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paulina Oña </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600&family=Roboto:ital,wght@0,100;0,300;1,100;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="menu-container">
+            <button id="menu-toggle" class="hamburger" tabindex="0" title="Abrir menú de información">
+                <span class="line red-solid"></span>
+                <span class="line green-dotted"></span>
+                <span class="line red-solid"></span>
+            </button>
+            
+            <nav id="simple-dropdown" class="simple-dropdown">
+                <a href="#" tabindex="0"><span>CV</span></a>
+                <a href="#" tabindex="0"><span>about me</span></a>
+                <a href="#" tabindex="0"><span>work with me</span></a>
+                <a href="#" tabindex="0"><span>blog</span></a>
+                <div class="spacer"></div>
+                <a href="https://instagram.com/tu_usuario" target="_blank" tabindex="0"><span>instagram</span></a>
+                <a href="https://youtube.com/tu_canal" target="_blank" tabindex="0"><span>youtube</span></a>
+            </nav>
+        </div>
+
+       <div class="project-legend">
+            <!-- 1. BUSCADOR E IDIOMAS (Alineados en la misma fila) -->
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 20px; margin-bottom: 15px; width: 100%;">
+                <!-- BUSCADOR -->
+                <div class="search-box">
+                    <input type="text" id="project-search" placeholder="Buscar / Search..." autocomplete="off" tabindex="0" title="Escribe para buscar proyectos">
+                </div>
+                <!-- BOTÓN DE IDIOMAS -->
+                <div class="lang-toggle" style="margin-bottom: 0; width: auto; justify-content: flex-end;">
+                    <span id="btn-lang-es" class="active" tabindex="0" title="Cambiar a Español">ES</span> 
+                    <span style="opacity:0.3">|</span> 
+                    <span id="btn-lang-en" tabindex="0" title="Switch to English">EN</span>
+                </div>
+            </div>
+
+            <!-- 2. INTERRUPTOR DE VISTAS Y AYUDA -->
+            <div class="view-toggle" style="gap: 10px; margin-bottom: 25px;">
+                <span id="btn-help" style="color: #ce6d13; opacity: 0.8; font-weight: bold;" tabindex="0" title="Ver manual de uso">[ ? ]</span>
+                <span style="opacity:0.3">|</span>
+                <span id="btn-view-map" class="active" tabindex="0" title="Ver mapa espacial">꩜ MAPA</span>
+                <span id="btn-view-mosaic" tabindex="0" title="Ver tablero de imágenes">⊞ MOSAICO</span>
+            </div>
+
+            <!-- LOS FILTROS -->
+            <div class="legend-group">
+                <div class="legend-item active" data-category="all" tabindex="0" title="Mostrar todos los proyectos"><span class="geo-icon">●</span> <span class="legend-text" data-es="Ver Todo" data-en="View All">Ver Todo</span></div>
+            </div>
+            
+            <div class="legend-group">
+                <div class="legend-item" data-category="curaduria" tabindex="0" title="Filtrar por Cura[nde][du]ría"><span class="geo-icon">❖</span> <span class="legend-text" data-es="Cura[nde][du]ría" data-en="Cura[nde][du]ría">Cura[nde][du]ría</span></div>
+                <div class="legend-desc" data-es="la ancestralidad y la espiritualidad como espacios anticoloniales, investigación, almaciguera-curadora, producción y gestión dentro de procesos de pensamiento y creación..." data-en="Ancestrality and spirituality as anticolonial spaces, research, seedbed-curator, production and management...">la ancestralidad y la espiritualidad como espacios anticoloniales, investigación, almaciguera-curadora, producción y gestión dentro de procesos de pensamiento y creación, GERMINAL, semillero de investigación para las Artes Vivas, red de comadres investigadoras, espacios micropolíticos de goce y pensamiento como un refugio dentro del mundo del arte</div>
+            </div>
+            
+            <div class="legend-group">
+                <div class="legend-item" data-category="dramaturgias" tabindex="0" title="Filtrar por Dramaturgias Expandidas"><span class="geo-icon">⨉</span> <span class="legend-text" data-es="Dramaturgias Expandidas" data-en="Expanded Dramaturgies">Dramaturgias Expandidas</span></div>
+                <div class="legend-desc" data-es="artista interdisciplinar con énfasis en teatro, escritura dramatúrgica, lectura performativa, artes vivas..." data-en="Interdisciplinary artist with an emphasis on theater, dramaturgical writing, performative reading, living arts...">artista interdisciplinar con énfasis en teatro, escritura dramatúrgica, lectura performativa, artes vivas, la ficción apalabrada y la generación de imágenes/sensaciones</div>
+            </div>
+            
+            <div class="legend-group">
+                <div class="legend-item" data-category="brujeria" tabindex="0" title="Filtrar por Actos de Posesión y Brujería Performativa">
+                    <span class="geo-icon">꩜</span> 
+                    <!-- AQUÍ ESTÁ EL SALTO DE LÍNEA (<br>) Y LA ALINEACIÓN -->
+                    <span class="legend-text" style="text-align: right; line-height: 1.1;" data-es="Actos de Posesión y<br>Brujería Performativa" data-en="Possession and<br>Witchcraft">Actos de Posesión y<br>Brujería Performativa</span>
+                </div>
+                <div class="legend-desc" data-es="brujería, lo real y lo virtual como materialidades, las teatralidades, las performatividades, las ritualidades" data-en="Witchcraft, the real and the virtual as materialities, theatricalities, performativities, ritualities">brujería, lo real y lo virtual como materialidades, las teatralidades, las performatividades, las ritualidades</div>
+            </div>
+
+            <div class="legend-group">
+                <div class="legend-item" data-category="manos" tabindex="0" title="Filtrar por Hacer con las Manos"><span class="geo-icon">✶</span> <span class="legend-text" data-es="Hacer con las Manos" data-en="Making with Hands">Hacer con las Manos</span></div>
+                <div class="legend-desc" data-es="DEMONNIA, comunidad de costureras de moda lenta, costurera, vestuario" data-en="DEMONNIA, slow fashion seamstresses community, seamstress, costumes">DEMONNIA, comunidad de costureras de moda lenta, costurera, vestuario</div>
+            </div>
+
+            <!-- TÍTULO QUE SOLO APARECE EN EL MOSAICO -->
+            <div id="mosaic-title-legend" class="mosaic-title-legend">
+                PAULINA OÑA<br><span>Archivo de Obra</span>
+            </div>
+        </div> <!-- AQUÍ SE CIERRA EL PROJECT-LEGEND -->
+
+        <!-- BOTÓN DE CENTRAR MAPA FLOTANTE (Ahora está libre y fuera del menú) -->
+        <div id="btn-reset-view" class="legend-item floating-reset-btn" tabindex="0" title="Devolver el mapa al centro">
+            <span class="geo-icon">⟲</span> <span class="legend-text" data-es="Centrar Mapa" data-en="Center Map">Centrar Mapa</span>
+        </div>
+
+    </header> <!-- Aquí cierra tu header actual -->
+  
+
+    <svg id="bg-canvas-layer1" class="parallax-layer"></svg>
+    <svg id="bg-canvas-layer2" class="parallax-layer"></svg>
+
+    <div class="book-spine"></div>
+    <div class="book-stitches"></div>
+    <div class="red-glow"></div>
+
+    <div id="center-title-btn" class="center-title" tabindex="0" title="Ver mi Biografía">
+        <h1 class="main-title">PAULINA OÑA</h1>
+       
+    </div>
+
+
+
+    <div class="book-spine"></div>
+    <div class="book-stitches"></div>
+    <div class="red-glow"></div>
+
+
+
+    <!-- VISTA 1: EL MAPA -->
+    <main id="data-vis-container" class="data-vis-container">
+        <svg id="data-vis-lines" class="data-vis-lines"></svg>
+        <div id="data-vis-nodes" class="data-vis-nodes"></div>
+    </main>
+
+    <!-- VISTA 2: EL MOSAICO (Oculto al inicio) -->
+    <main id="mosaic-container" class="mosaic-container hidden">
+        <!-- Se llena con JS automáticamente -->
+    </main>
+
+    <!-- VENTANAS MODALES -->
+    <div id="project-modal" class="project-modal">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close geo-icon">⨉</button>
+            <h2 id="modal-title" class="modal-title">Título del Proyecto</h2>
+            
+            <div id="modal-category" class="modal-category">
+                <span class="geo-icon">✶</span> Textil & Vestuario
+            </div>
+
+            <div id="modal-roles" class="modal-roles"></div>
+
+            <div id="standard-layout">
+                <div class="modal-video-container">
+                    <iframe id="modal-video" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                </div>
+                <div class="modal-description">
+                    <p id="modal-desc-text">Cargando datos del archivo...</p>
+                </div>
+                <div id="modal-gallery" class="modal-gallery"></div>
+            </div>
+
+            <div id="custom-layout-container" class="custom-layout-container"></div>
+            
+            <div class="modal-miro-container" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="project-modal">
+        <div class="modal-content">
+            <button id="info-modal-close" class="modal-close geo-icon">⨉</button>
+            <h2 id="info-modal-title" class="modal-title">
+                <span class="title-icon geo-icon">✶</span> Título
+            </h2>
+            <div class="modal-description">
+                <p id="info-modal-desc-text">Cargando...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox">
+        <span id="lightbox-close" class="lightbox-close geo-icon">⨉</span>
+        <img id="lightbox-img" class="lightbox-img" src="" alt="Ampliación de obra">
+    </div>
+
+    <!-- MENSAJE DE ONBOARDING SUTIL -->
+    <div id="onboarding-toast" class="onboarding-toast" data-es="Arrastra el fondo para explorar.<br>Doble clic para germinar." data-en="Drag the background to explore.<br>Double click to plant a seed."></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
