@@ -334,12 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
             infoModal.classList.remove('active');
         }
     });
-    /* ====================================================================
-       5. DIBUJO DEL MOSAICO Y MAPA
-       ==================================================================== */
-    /* ====================================================================
-       5. DIBUJO DEL MOSAICO Y MAPA (ESTILO ATLAS WARBURG)
-       ==================================================================== */
+   
     function drawMosaic() {
         mosaicContainer.innerHTML = '';
         const scrollExtension = document.createElement('div');
@@ -347,18 +342,19 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollExtension.style.top = '0'; scrollExtension.style.left = '0'; scrollExtension.style.zIndex = '-1';
         mosaicContainer.appendChild(scrollExtension);
 
+        // AQUÍ ESTABA EL ERROR PRINCIPAL: Asegurarnos de que accedemos bien a projectsData
         const displayWords = activeFilter === 'all' 
             ? allWords 
-            : allWords.filter(word => ((projectsData[word] || projectsData["default"]).category || "default").includes(activeFilter));            
+            : allWords.filter(word => {
+                const proj = projectsData[word] || projectsData["default"];
+                return (proj.category || "default").includes(activeFilter);
+            });            
         
         const isMobile = window.innerWidth <= 768; 
         
-        // CONFIGURACIÓN WARBURG: Menos columnas para que las fotos sean grandes y detalladas
         const cols = isMobile ? 2 : 4; 
         const gridWidth = isMobile ? 90 : 70; 
         const colWidth = gridWidth / cols; 
-        
-        // Espaciado vertical muy apretado para dar la sensación de muro lleno
         const rowSpacing = isMobile ? 20 : 35; 
 
         displayWords.forEach((word, index) => {
@@ -370,28 +366,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const randomFormat = formats[Math.floor(Math.random() * formats.length)];
             item.classList.add(`format-${randomFormat}`);
 
-            // Tamaños base controlados para que encajen mejor
             let baseWidth = isMobile ? (window.innerWidth / 2.6) : (window.innerWidth / 5.5);
             if (randomFormat === 'horizontal' || randomFormat === 'panoramic') baseWidth *= 1.1;
             
-            // Variación de tamaño casi nula (para que mantengan el orden de la cuadrícula)
             let escalaAleatoria = 0.95 + (Math.random() * 0.1); 
             item.style.width = `${baseWidth * escalaAleatoria}px`; 
-            item.style.transform = `rotate(0deg)`; // Siempre rectas
+            item.style.transform = `rotate(0deg)`;
 
-            // Colores de cartulina fotográfica antigua (blancos rotos, grises, sepias claros)
             const coloresFondo = ['#e9e9e5', '#dcdcd5', '#fdfcf8'];
             item.style.backgroundColor = coloresFondo[Math.floor(Math.random() * coloresFondo.length)];            
             
-            // CÁLCULO ESTRICTO DE POSICIÓN (Sin variables aleatorias de desorden)
             const col = index % cols; 
             const row = Math.floor(index / cols);
             
             const offsetLeft = isMobile ? 5 : 2; 
-            const leftPercent = offsetLeft + (col * colWidth) + 1; // 1vw de separación perfecta
+            const leftPercent = offsetLeft + (col * colWidth) + 1; 
             
             const offsetTop = isMobile ? 48 : 24; 
-            // Posición Y milimétrica (apenas 2 puntitos de variación para no verse robótico)
             const topPercent = offsetTop + (row * rowSpacing) + (Math.random() * 2); 
             
             item.style.left = `${leftPercent}vw`; item.style.top = `${topPercent}vh`; item.style.zIndex = index + 10; 
@@ -402,13 +393,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (randomFormat === 'vertical') { pW = 600; pH = 800; }
             if (randomFormat === 'panoramic') { pW = 800; pH = 450; }
 
+            // SEGUNDO ERROR POTENCIAL: Nos aseguramos de que haya un fallback seguro si no hay imágenes
             const imgSrc = (project.images && project.images.length > 0) ? project.images[0] : `https://picsum.photos/seed/${cleanWord}/${pW}/${pH}`;
-// Dentro de drawMosaic()
-const img = document.createElement('img'); 
-img.src = imgSrc; 
-img.alt = project.title;
-img.loading = "lazy"; // <--- AÑADE ESTA LÍNEA            const overlay = document.createElement('div'); overlay.className = 'mosaic-overlay';
-            overlay.innerHTML = `<span class="geo-icon" style="font-size:0.6rem;">${catInfo.icon}</span> <span class="mosaic-title">${project.title.toUpperCase()}</span>`;
+            
+            const img = document.createElement('img'); 
+            img.src = imgSrc; 
+            img.alt = project.title;
+            img.loading = "lazy"; 
+            
+            const overlay = document.createElement('div'); overlay.className = 'mosaic-overlay';
+            // TERCER ERROR: Asegurar que catInfo exista antes de intentar leer su icono
+            const iconToUse = catInfo ? catInfo.icon : "●";
+            overlay.innerHTML = `<span class="geo-icon" style="font-size:0.6rem;">${iconToUse}</span> <span class="mosaic-title">${project.title.toUpperCase()}</span>`;
+            
             item.setAttribute('tabindex', '0');
             item.setAttribute('title', `Ver proyecto: ${project.title}`);
             item.appendChild(img); item.appendChild(overlay); mosaicContainer.appendChild(item); makeDraggable(item, word);
