@@ -149,8 +149,24 @@ body {
 .dv-node:hover .dv-text { transform: scale(2.8); color: #c0392b; font-weight: 300; font-style: italic; }
 
 /* Control de qué vista está activa */
-body.viewing-mosaic .center-title, body.viewing-mosaic .red-glow, body.viewing-mosaic .data-vis-container { opacity: 0; pointer-events: none; }
-body.viewing-map .mosaic-container { opacity: 0; pointer-events: none; display: none; }
+body.viewing-mosaic .red-glow, body.viewing-mosaic .data-vis-container { 
+    opacity: 0; 
+    pointer-events: none; 
+}
+
+/* Modificación del Título Central en Vista Mosaico */
+body.viewing-mosaic .center-title {
+    opacity: 0.2; /* Lo hacemos translúcido como una marca de agua en el fondo */
+    pointer-events: none; /* Desactivamos los clics para poder mover las fotos por encima */
+    z-index: 10; /* Lo empujamos hacia el fondo, detrás del contenedor del mosaico (que tiene z-index 60) */
+    position: fixed; /* Lo mantenemos fijo en el centro de la pantalla */
+}
+
+/* Cambiar los colores del título central en Mosaico para que contraste con el fondo oscuro */
+body.viewing-mosaic .center-title .main-title {
+    color: #fdfcf8;
+    text-shadow: 0 0 20px rgba(0,0,0,0.8); /* Una sombra para que resalte sobre las fotos */
+}
 
 .mosaic-container {
     position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -371,21 +387,28 @@ body.viewing-mosaic .floating-reset-btn {
    =================================================== */
 .mosaic-title-legend {
     display: none; /* Oculto por defecto en el mapa */
-    text-align: right;
-    margin-top: 35px;
+    position: fixed; /* Lo liberamos de la caja de la derecha */
+    top: 20px; /* Distancia desde el techo */
+    left: 42%; /* Lo mandamos al centro */
+    transform: translateX(-50%); /* Centrado matemático exacto */
+    text-align: center; /* Centramos el texto interno */
+    z-index: 100; /* Por encima de las fotos */
+    pointer-events: none; /* Para que no estorbe al hacer clic o arrastrar fotos */
+    
+    /* Tipografía */
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
-    font-size: 1.2rem;
+    font-size: 0.8rem; /* Un poco más grande para que destaque */
     color: #fdfcf8;
-    letter-spacing: 3px;
+    letter-spacing: 5px; /* Elegancia */
     line-height: 1.2;
 }
 
 .mosaic-title-legend span {
     font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0;
-    color: #f15e0f;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: #f15e0f; /* Naranja/Rojo sutil */
     font-weight: 300;
     text-transform: uppercase;
 }
@@ -423,19 +446,216 @@ body.viewing-mosaic .mosaic-title-legend {
 /* 4. Aplicar la tarjeta translúcida a Laptops (pantallas hasta 1366px) */
 @media (max-width: 1366px) {
     .project-legend {
-        background: rgba(253, 252, 248, 0.85); /* Fondo claro cristalino */
+        background: transparent !important; /* Antes era rgba(253, 252, 248, 0.85) */
         padding: 20px 25px;
         border-radius: 15px;
-        box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.05); /* Sombra suave */
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+        box-shadow: none !important; /* Antes tenía sombra */
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
     
-    /* Si están en el Mosaico en la Laptop, la tarjeta se vuelve oscura */
     body.viewing-mosaic .project-legend {
-        background: rgba(22, 22, 22, 0.85) !important;
-        box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.6);
+        background: transparent !important; 
+        box-shadow: none !important;
     }
+}
+/* ===================================================
+   BOTÓN DESPLEGABLE Y MENÚ DE FILTROS
+   =================================================== */
+
+.filter-btn {
+    background: transparent;
+    border: 1px dashed rgba(192, 57, 43, 0.4);
+    color: #5c2c2c;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    outline: none;
+    border-radius: 4px;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    border-style: solid;
+    border-color: #c0392b;
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.05);
+}
+
+.filter-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(253, 252, 248, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 0 15px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    box-shadow: 0 10px 30px rgba(0,0,0,0);
+}
+
+.filter-content.show {
+    max-height: 800px; /* Altura suficiente para que quepan todos los textos */
+    opacity: 1;
+    visibility: visible;
+    padding: 15px;
+    border-color: rgba(192, 57, 43, 0.15);
+    box-shadow: -5px 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Ajuste del botón en la vista del Mosaico (modo oscuro) */
+body.viewing-mosaic .filter-btn {
+    color: #fdfcf8;
+    border-color: rgba(253, 252, 248, 0.4);
+}
+body.viewing-mosaic .filter-btn:hover, body.viewing-mosaic .filter-btn.active {
+    color: #f15e0f;
+    border-color: #f15e0f;
+    background: rgba(241, 94, 15, 0.1);
+}
+body.viewing-mosaic .filter-content {
+    background: rgba(22, 22, 22, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+/* ===================================================
+   NUEVO MENÚ HAMBURGUESA Y DESPLEGABLE
+   =================================================== */
+
+.hamburger-menu-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    outline: none;
+    transition: transform 0.3s ease;
+}
+
+.hamburger-menu-btn .burger-line {
+    width: 30px;
+    height: 2px;
+    background-color: #c0392b;
+    transition: all 0.3s ease;
+}
+
+.hamburger-menu-btn:hover .burger-line {
+    background-color: #f15e0f;
+}
+
+.filter-content {
+    max-height: 0;
+    overflow: visible; /* Cambiado a visible para que los tooltips salgan */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(253, 252, 248, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 0 15px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    box-shadow: 0 10px 30px rgba(0,0,0,0);
+}
+
+.filter-content.show {
+    max-height: 800px;
+    opacity: 1;
+    visibility: visible;
+    padding: 15px;
+    border-color: rgba(192, 57, 43, 0.15);
+    box-shadow: -5px 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Ocultar las descripciones originales que estaban anidadas */
+.legend-desc {
+    display: none !important;
+}
+
+/* ===================================================
+   EFECTO HOVER (TOOLTIP) PARA LAS DESCRIPCIONES
+   =================================================== */
+
+.tooltip-container {
+    position: relative; /* Clave para posicionar el tooltip */
+}
+
+.tooltip-desc {
+    position: absolute;
+    right: 110%; /* Aparece a la izquierda de la categoría */
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    width: 250px;
+    background: rgba(253, 252, 248, 0.98);
+    border: 1px solid rgba(192, 57, 43, 0.2);
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.75rem;
+    color: #555;
+    line-height: 1.4;
+    text-align: right;
+    box-shadow: -5px 5px 15px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+
+/* La flechita del tooltip */
+.tooltip-desc::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -6px; /* Flecha apuntando a la derecha */
+    transform: translateY(-50%);
+    border-width: 6px 0 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent transparent rgba(253, 252, 248, 0.98);
+    filter: drop-shadow(2px 0 1px rgba(192, 57, 43, 0.2));
+}
+
+/* Mostrar el tooltip al pasar el ratón */
+.tooltip-container:hover .tooltip-desc {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Ajustes para el Mosaico (Modo Oscuro) */
+body.viewing-mosaic .hamburger-menu-btn .burger-line {
+    background-color: #fdfcf8;
+}
+body.viewing-mosaic .hamburger-menu-btn:hover .burger-line {
+    background-color: #f15e0f;
+}
+body.viewing-mosaic .filter-content {
+    background: rgba(22, 22, 22, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+body.viewing-mosaic .tooltip-desc {
+    background: rgba(22, 22, 22, 0.98);
+    color: #e0e0e0;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+body.viewing-mosaic .tooltip-desc::after {
+    border-color: transparent transparent transparent rgba(22, 22, 22, 0.98);
 }
 /* ===================================================
    ADAPTACIÓN PARA MÓVILES
@@ -476,21 +696,21 @@ body.viewing-mosaic .mosaic-title-legend {
     /* 3. CATEGORÍAS (Ancladas al borde derecho como una pestaña) */
     .project-legend {
         position: absolute !important;
-        top: 0px !important; /* Empieza debajo del buscador */
-        right: 0 !important; /* Pegado a la pantalla derecha */
+        top: 0px !important; 
+        right: 0 !important; 
         left: auto !important;
         transform: none !important;
-        width: auto !important; /* Solo ocupa lo necesario */
         min-width: 220px;
-        max-width: 85%; /* Evita que tape el lado izquierdo */
+        max-width: 85%; 
         padding: 15px 15px 15px 20px !important;
-        align-items: flex-end !important; /* Empuja el contenido contra la derecha */
-        background: rgba(244, 241, 234, 0.639) !important;
-        border-radius: 20px 0 0 20px !important; /* Redondeado SOLO a la izquierda, plano a la derecha */
+        align-items: flex-end !important; 
+        
+        /* 👇 AQUÍ ESTÁ EL CAMBIO CLAVE 👇 */
+        background: transparent !important; /* Antes era rgba(244, 241, 234, 0.639) */
+        box-shadow: none !important; /* Antes tenía sombra negra */
+        border-radius: 0 !important; 
         z-index: 10;
-        box-shadow: -4px 4px 15px rgba(0, 0, 0, 0.82); /* Sombra hacia la izquierda */
     }
-
     /* Alinear textos e iconos de categorías a la derecha */
     .legend-item {
         justify-content: flex-end !important; 
@@ -571,9 +791,152 @@ body.viewing-mosaic .mosaic-title-legend {
         -webkit-backdrop-filter: blur(6px); /* Soporte para Safari/iPhone */
         
         /* Una sombra suave y un bordecito sutil para despegarlo de las fotos */
-        box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.6);
+        box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.073);
         border-left: 1px solid rgba(255, 255, 255, 0.05);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 0, 0, 0.785);
     }
     
+    /* ===================================================
+   HACER EL CONTENEDOR DERECHO 100% INVISIBLE 
+   =================================================== */
+.project-legend, 
+body.viewing-mosaic .project-legend {
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+}
+
+/* Ocultar el botón original hamburguesa nuevo que ya no usamos */
+.hamburger-menu-btn {
+    display: none !important;
+}
+/* ===================================================
+   CONTENEDOR DE LEYENDA (FILTROS Y BUSCADOR)
+   =================================================== */
+/* Eliminar fondos y bordes del contenedor principal en todas las vistas */
+.project-legend, 
+body.viewing-mosaic .project-legend {
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+}
+
+/* Modificamos el buscador para que parezca una línea sutil de texto */
+#project-search {
+    background: transparent !important; 
+    border: none !important;
+    border-bottom: 1px dashed rgba(192, 57, 43, 0.4) !important; 
+    font-family: 'Space Mono', monospace; 
+    font-size: 0.75rem; 
+    padding: 6px 0 !important; 
+    width: 100%; 
+    color: #5c2c2c; 
+    outline: none; 
+    transition: border 0.3s;
+    text-align: right;
+    border-radius: 0 !important; /* Quitar bordes redondeados */
+}
+
+#project-search:focus { 
+    border-bottom-color: #c0392b !important; 
+    box-shadow: none !important; 
+}
+
+/* Estilos para el contenedor desplegable de filtros, eliminando la caja */
+.filter-content {
+    max-height: 0;
+    overflow: visible; 
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent !important; /* Quitamos el fondo borroso */
+    padding: 0;
+    margin-top: 10px;
+    border: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    box-shadow: none !important;
+}
+
+.filter-content.show {
+    max-height: 800px;
+    opacity: 1;
+    visibility: visible;
+    padding-top: 15px; /* Solo espacio arriba al abrir */
+}
+
+/* ===================================================
+   EFECTO HOVER (TOOLTIP) PARA LAS DESCRIPCIONES
+   =================================================== */
+/* Ocultar las descripciones originales que estaban anidadas bajo el titulo de la categoria */
+.legend-desc {
+    display: none !important;
+}
+
+.tooltip-container {
+    position: relative; 
+}
+
+.tooltip-desc {
+    position: absolute;
+    right: 110%; 
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    width: 250px;
+    background: rgba(253, 252, 248, 0.98);
+    border: 1px solid rgba(192, 57, 43, 0.2);
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.75rem;
+    color: #555;
+    line-height: 1.4;
+    text-align: right;
+    box-shadow: -5px 5px 15px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+
+.tooltip-desc::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -6px; 
+    transform: translateY(-50%);
+    border-width: 6px 0 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent transparent rgba(253, 252, 248, 0.98);
+    filter: drop-shadow(2px 0 1px rgba(192, 57, 43, 0.2));
+}
+
+.tooltip-container:hover .tooltip-desc {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Ajustes Mosaico Tooltip */
+body.viewing-mosaic .tooltip-desc {
+    background: rgba(22, 22, 22, 0.98);
+    color: #e0e0e0;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+body.viewing-mosaic .tooltip-desc::after {
+    border-color: transparent transparent transparent rgba(22, 22, 22, 0.98);
+}
+body.viewing-mosaic #project-search {
+    border-bottom-color: rgba(253, 252, 248, 0.4) !important;
+    color: #fdfcf8 !important;
+}
+body.viewing-mosaic #filter-menu-toggle {
+    color: #fdfcf8 !important;
+}
 }
