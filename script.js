@@ -8,7 +8,9 @@ import {
     projectsData, 
     stitchPatterns, 
     threadColors, 
-    allWords 
+    allWords,       // <--- AQUÍ DEBE HABER UNA COMA
+    helpData_es,    // <--- Y AQUÍ DEBE HABER UNA COMA
+    helpData_en     // <--- EL ÚLTIMO NO LLEVA COMA
 } from './data.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -710,24 +712,27 @@ document.addEventListener('DOMContentLoaded', () => {
             textSpan.style.fontSize = `${randomFontSize}rem`; 
             textSpan.style.lineHeight = '1.3'; 
             textSpan.style.whiteSpace = 'normal'; 
-            
+            textSpan.style.display = 'block';
+            textSpan.style.width = '100%';
+            textSpan.style.transformOrigin = 'center center'; // Para que gire sobre su propio eje
             textSpan.innerHTML = `<span class="node-icon geo-icon">${catInfo.icon || '●'}</span> ${word}`; 
             el.appendChild(textSpan);
             
-            let rotation = angle * (180 / Math.PI);
+           let baseAngleDeg = angle * (180 / Math.PI); // Guardamos el ángulo real
+            let rotation = baseAngleDeg;
             const w = isMobile ? 160 : 280;
             el.style.width = `${w}px`;
 
             if (rotation > 90 && rotation < 270) {
                 rotation += 180; 
                 el.style.transformOrigin = "right center";
-                textSpan.style.transformOrigin = "right center"; 
                 el.style.textAlign = "right";
+                textSpan.style.textAlign = "right"; // Se lo aplicamos también al span
                 el.style.left = `${x - w}px`; 
             } else {
                 el.style.transformOrigin = "left center";
-                textSpan.style.transformOrigin = "left center";
                 el.style.textAlign = "left";
+                textSpan.style.textAlign = "left"; // Se lo aplicamos también al span
                 el.style.left = `${x}px`;
             }
             
@@ -738,7 +743,8 @@ document.addEventListener('DOMContentLoaded', () => {
             el.setAttribute('title', `Abrir: ${projectInfo.title || word}`);
             
             dataNodesContainer.appendChild(el); 
-            window.globalNodesList.push({ x: x, y: y, element: el });
+            // Guardamos el ángulo base para los cálculos matemáticos
+            window.globalNodesList.push({ x: x, y: y, element: el, baseAngleDeg: baseAngleDeg });
         });
 
         if (stitchPatterns && threadColors) {
@@ -758,12 +764,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateDVTransform() { 
+   function updateDVTransform() { 
         if (dataVisContainer) {
+            // Esto gira todo el lienzo
             dataVisContainer.style.transform = `translate(${dvTranslateX}px, ${dvTranslateY}px) rotate(${dvRotation}deg)`;
+
+            // 👇 NUEVA MAGIA: Mantener las palabras siempre al derecho 👇
+            let currentRot = dvRotation % 360;
+            if (currentRot < 0) currentRot += 360; // Normalizar a positivo
+
+            if (window.globalNodesList) {
+                window.globalNodesList.forEach(node => {
+                    if (node.baseAngleDeg === undefined) return;
+
+                    // Calculamos el ángulo absoluto de la palabra en la pantalla
+                    let absoluteAngle = (node.baseAngleDeg + currentRot) % 360;
+                    
+                    // ¿Quedó en la mitad izquierda (boca abajo)?
+                    let isUpsideDown = (absoluteAngle > 90 && absoluteAngle < 270);
+                    // ¿Se dibujó originalmente en la mitad izquierda?
+                    let originallyFlipped = (node.baseAngleDeg > 90 && node.baseAngleDeg < 270);
+
+                    const textSpan = node.element.querySelector('.dv-text');
+                    if (textSpan) {
+                        // Si la palabra cruzó el umbral y está de cabeza, la giramos 180 grados y cambiamos su alineación
+                        if (isUpsideDown !== originallyFlipped) {
+                            textSpan.style.transform = "rotate(180deg)";
+                            textSpan.style.textAlign = originallyFlipped ? "left" : "right";
+                        } else {
+                            // Si está en su posición natural
+                            textSpan.style.transform = "rotate(0deg)";
+                            textSpan.style.textAlign = originallyFlipped ? "right" : "left";
+                        }
+                    }
+                });
+            }
         }
     }
-
     let ticking = false;
 
     window.addEventListener('mousemove', (e) => {
@@ -927,14 +964,20 @@ document.addEventListener('DOMContentLoaded', () => {
     updateLanguageUI();
     applyViewMode();
     
-    // 7. BUSCADOR EN TIEMPO REAL
+    // 7. BUSCADOR EN TIEMPO REAL (CON TOLERANCIA A ERRORES/TILDES)
     const searchInput = document.getElementById('project-search');
+    
+    // Función auxiliar para quitar tildes y normalizar el texto
+    const normalizeText = (text) => {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    };
+
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
+            const term = normalizeText(e.target.value);
             
             document.querySelectorAll('.dv-node').forEach(node => {
-                const text = node.innerText.toLowerCase();
+                const text = normalizeText(node.innerText);
                 const isMatch = text.includes(term);
                 node.style.opacity = isMatch ? '1' : '0.1';
                 node.style.pointerEvents = isMatch ? 'auto' : 'none';
@@ -942,7 +985,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             document.querySelectorAll('.mosaic-item').forEach(item => {
-                const text = item.innerText.toLowerCase();
+                const text = normalizeText(item.innerText);
                 const isMatch = text.includes(term);
                 item.style.opacity = isMatch ? '1' : '0.1';
                 item.style.pointerEvents = isMatch ? 'auto' : 'none';
@@ -951,31 +994,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Botón de Ayuda
+// --- BOTÓN DE AYUDA Y FAQ ---
     const btnHelp = document.getElementById('btn-help');
     if (btnHelp) {
         btnHelp.addEventListener('click', () => {
-            const manualTitle = currentLang === 'es' ? 'Manual de Navegación' : 'Navigation Manual';
-            const manualText = currentLang === 'es' 
-                ? `<b>EXPLORACIÓN BÁSICA:</b><br>
-                   - <b>Arrastra</b> el fondo oscuro para mover el lienzo en cualquier dirección.<br>
-                   - <b>Rueda del ratón</b> (o arrastre con dos dedos) para rotar el mapa.<br>
-                   - <b>Doble Clic</b> (o toque rápido) en el espacio vacío para germinar una conexión aleatoria.<br><br>
-                   <b>ATAJOS DE TECLADO:</b><br>
-                   - Presiona <b>[ M ]</b> para ir a la vista de MAPA.<br>
-                   - Presiona <b>[ T ]</b> para ir al TABLERO / Mosaico.<br><br>
-                   <b>EL ARCHIVO:</b><br>
-                   Haz clic en cualquier constelación o fotografía para acceder a la ficha técnica de la obra y sus registros (videos, textos, procesos en Miro).` 
-                : `<b>BASIC EXPLORATION:</b><br>
-                   - <b>Drag</b> the dark background to move the canvas in any direction.<br>
-                   - <b>Scroll</b> (or two-finger drag) to rotate the map.<br>
-                   - <b>Double Click</b> (or quick tap) on empty space to plant a random connection seed.<br><br>
-                   <b>KEYBOARD SHORTCUTS:</b><br>
-                   - Press <b>[ M ]</b> to switch to MAP view.<br>
-                   - Press <b>[ T ]</b> to switch to BOARD / Mosaic view.<br><br>
-                   <b>THE ARCHIVE:</b><br>
-                   Click on any constellation or photograph to access the project's technical sheet and its records (videos, texts, Miro process boards).`;
-            openInfoModal(manualTitle, manualText, '❖');
+            const data = currentLang === 'es' ? helpData_es : helpData_en;
+            openInfoModal(data.title, data.content, '❖');
         });
     }
 });

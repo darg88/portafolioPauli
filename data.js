@@ -496,3 +496,51 @@ export const categoryMap = {
     ];
 
 
+/* ==========================================
+   DATOS DE AYUDA Y FAQ
+========================================== */
+export const helpData_es = {
+    title: "Manual de Navegación & FAQ",
+    content: `<b>EXPLORACIÓN BÁSICA:</b><br>
+    - <b>Arrastra</b> el fondo oscuro para mover el lienzo.<br>
+    - <b>Rueda del ratón</b> (o arrastre con dos dedos) para rotar el mapa.<br>
+    - <b>Doble Clic</b> (o toque rápido) en el espacio vacío para germinar una conexión aleatoria.<br><br>
+    <b>ATAJOS DE TECLADO:</b><br>
+    - Presiona <b>[ M ]</b> para ir a la vista de MAPA.<br>
+    - Presiona <b>[ T ]</b> para ir al TABLERO / Mosaico.<br><br>
+    <b>EL ARCHIVO:</b><br>
+    Haz clic en cualquier constelación o fotografía para acceder a la ficha técnica de la obra y sus registros.<br><br>
+    <hr style="border: 0; border-top: 1px dashed rgba(192,57,43,0.3); margin: 15px 0;">
+    <b>PREGUNTAS FRECUENTES (FAQ):</b><br><br>
+    <b>¿Qué significa "germinar"?</b><br>
+    Al hacer doble clic en el mapa, creas un nodo temporal (una semilla) que teje conexiones visuales entre proyectos para descubrir nuevas relaciones.<br><br>
+    <b>¿Cómo cierro las fotos o proyectos?</b><br>
+    Puedes hacer clic en la [ ⨉ ] de la esquina, hacer clic en el fondo borroso, o simplemente presionar la tecla ESCAPE.<br><br>
+    <b>¿Por qué no encuentro un proyecto en el buscador?</b><br>
+    Asegúrate de estar en la vista "Ver Todo" en los filtros. El buscador actúa únicamente dentro de la categoría que tengas activa en ese momento.<br><br>
+    <b>¿Cómo utilizo el Mosaico?</b><br>
+    En la vista Mosaico, puedes hacer clic y arrastrar cualquier fotografía libremente para organizar tu propio atlas visual. Utiliza el menú "Filtrar Archivo" para ver solo las categorías que te interesen.`
+};
+
+export const helpData_en = {
+    title: "Navigation Manual & FAQ",
+    content: `<b>BASIC EXPLORATION:</b><br>
+    - <b>Drag</b> the dark background to move the canvas.<br>
+    - <b>Scroll</b> (or two-finger drag) to rotate the map.<br>
+    - <b>Double Click</b> (or quick tap) on empty space to plant a random connection seed.<br><br>
+    <b>KEYBOARD SHORTCUTS:</b><br>
+    - Press <b>[ M ]</b> to switch to MAP view.<br>
+    - Press <b>[ T ]</b> to switch to BOARD / Mosaic view.<br><br>
+    <b>THE ARCHIVE:</b><br>
+    Click on any constellation or photograph to access the project's technical sheet and its records.<br><br>
+    <hr style="border: 0; border-top: 1px dashed rgba(192,57,43,0.3); margin: 15px 0;">
+    <b>FREQUENTLY ASKED QUESTIONS (FAQ):</b><br><br>
+    <b>What does "plant a seed" mean?</b><br>
+    By double-clicking on the map, you create a temporary node (a seed) that weaves visual connections between projects to discover new relationships.<br><br>
+    <b>How do I close photos or projects?</b><br>
+    You can click the [ ⨉ ] in the corner, click on the blurred background, or simply press the ESCAPE key.<br><br>
+    <b>Why can't I find a project in the search?</b><br>
+    Make sure you are in the "View All" view in the filters. The search engine searches within the currently active category.<br><br>
+    <b>How do I use the Mosaic?</b><br>
+    In the Mosaic view, you can click and drag any photograph freely to organize your own visual atlas. Use the "Filter Archive" menu to see only the categories that interest you.`
+};
